@@ -1,10 +1,11 @@
-# Vehicle Report Card
+# VCC Vehicle Report Card
 
-An interactive, fillable, and printable web app that replicates the "Your Vehicle Report Card" multi-point vehicle inspection form.
+An interactive, fillable, and printable web app styled to [Vancouver Community College (VCC)](https://www.vcc.ca/) brand standards. It replicates the "Your Vehicle Report Card" multi-point vehicle inspection form used by the VCC Automotive program.
 
 ## Features
 
 - **Single HTML file** — no frameworks, no build tools, no dependencies
+- **VCC brand styling** — navy blue `#002855`, accent red `#C41230`, and VCC logo (inline SVG mark + wordmark)
 - **All 7 inspection sections** faithfully recreated:
   1. Visual 360° Perimeter Inspection
   2. Visual Under Hood Inspection
@@ -21,7 +22,6 @@ An interactive, fillable, and printable web app that replicates the "Your Vehicl
 - **All fields fillable** — text inputs, checkboxes, radio buttons, and text areas
 - **Print-optimized** — clean single-page letter-paper output via `@media print` CSS
 - **Print & Reset Form** buttons
-- **Brand styling** — dark blue `#003478` and accent red `#d4213d`
 
 ## How to Use
 
