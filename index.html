@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ford Vehicle Report Card</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    background: #e8e8e8;
+    color: #000;
+  }
+
+  /* ===== FORD BRAND COLORS ===== */
+  :root {
+    --ford-blue: #003478;
+    --ford-red: #d4213d;
+    --green: #2e7d32;
+    --blue-check: #1565c0;
+    --red-check: #d4213d;
+    --border: #444;
+    --light-border: #aaa;
+    --section-bg: #dde3ec;
+    --row-alt: #f0f4f8;
+  }
+
+  /* ===== PAGE WRAPPER ===== */
+  .page {
+    width: 215mm;
+    min-height: 279mm;
+    background: #fff;
+    margin: 20px auto;
+    padding: 6mm 8mm;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  }
+
+  /* ===== PRINT & RESET BUTTONS ===== */
+  .no-print-bar {
+    text-align: center;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .btn {
+    padding: 8px 22px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-print { background: var(--ford-blue); color: #fff; }
+  .btn-reset { background: var(--ford-red); color: #fff; }
+
+  /* ===== INPUTS ===== */
+  input[type="text"], textarea {
+    border: none;
+    border-bottom: 1px solid #555;
+    background: transparent;
+    font-size: 11px;
+    font-family: inherit;
+    color: #000;
+    outline: none;
+    padding: 1px 2px;
+  }
+  input[type="text"] { height: 16px; }
+  textarea {
+    resize: none;
+    width: 100%;
+    display: block;
+  }
+  input[type="checkbox"] { width: 12px; height: 12px; cursor: pointer; vertical-align: middle; }
+
+  /* ===== HEADER ===== */
+  .header { display: flex; gap: 4px; align-items: stretch; border: 1.5px solid var(--border); }
+
+  .header-left {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .header-field {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2px 4px;
+  }
+  .header-field:nth-child(even) { border-right: none; }
+  .header-field label { display: block; font-size: 8px; font-weight: bold; color: #555; text-transform: uppercase; }
+  .header-field input[type="text"] { width: 100%; }
+
+  .header-center {
+    width: 180px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 6px;
+    border-right: 1px solid var(--border);
+  }
+  .title-your { font-size: 13px; font-weight: bold; color: var(--ford-red); letter-spacing: 1px; text-transform: uppercase; }
+  .title-vehicle { font-size: 18px; font-weight: 900; color: var(--ford-blue); text-transform: uppercase; letter-spacing: 1px; }
+  .title-report { font-size: 13px; font-weight: bold; color: var(--ford-blue); text-transform: uppercase; letter-spacing: 1px; }
+  .title-card { font-size: 11px; font-weight: bold; color: var(--ford-blue); text-transform: uppercase; }
+
+  .header-right {
+    width: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px 6px;
+    font-size: 8px;
+  }
+  .header-right .check-row { display: flex; align-items: flex-start; gap: 3px; margin-bottom: 4px; font-weight: bold; font-size: 8px; line-height: 1.2; }
+
+  /* ===== LEGEND ===== */
+  .legend {
+    border: 1.5px solid var(--border);
+    border-top: none;
+    padding: 3px 6px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f5f5f5;
+    font-size: 9px;
+    font-weight: bold;
+  }
+  .legend-item { display: flex; align-items: center; gap: 3px; }
+  .leg-ok   { color: var(--green); }
+  .leg-fut  { color: var(--blue-check); }
+  .leg-imm  { color: var(--ford-red); }
+
+  /* ===== SECTION HEADER ===== */
+  .section { margin-top: 5px; border: 1.5px solid var(--border); }
+  .section-header {
+    background: var(--ford-blue);
+    color: #fff;
+    font-weight: bold;
+    font-size: 10px;
+    padding: 3px 6px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .section-header .op-codes { font-size: 8px; font-style: italic; }
+
+  /* ===== TRI-STATE INDICATOR ===== */
+  .tri {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #888;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    background: #fff;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .tri[data-state="ok"]     { color: var(--green); border-color: var(--green); background: #e8f5e9; }
+  .tri[data-state="future"] { color: var(--blue-check); border-color: var(--blue-check); background: #e3f2fd; }
+  .tri[data-state="now"]    { color: var(--ford-red); border-color: var(--ford-red); background: #fce4ec; }
+
+  /* ===== INSPECTION ROW ===== */
+  .insp-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--light-border);
+    padding: 2px 4px;
+    min-height: 22px;
+  }
+  .insp-row:last-child { border-bottom: none; }
+  .insp-row:nth-child(even) { background: var(--row-alt); }
+  .insp-label { flex: 1; font-size: 9.5px; padding-left: 4px; }
+  .insp-label .op { font-size: 8px; color: #666; }
+  .insp-indicators { display: flex; gap: 3px; }
+
+  /* ===== SECTION 1 - 360° PERIMETER ===== */
+  .perimeter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .perimeter-quadrant {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .perimeter-quadrant:nth-child(2),
+  .perimeter-quadrant:nth-child(4) { border-right: none; }
+  .perimeter-quadrant:nth-child(3),
+  .perimeter-quadrant:nth-child(4) { border-bottom: none; }
+  .quad-header {
+    background: var(--section-bg);
+    font-weight: bold;
+    font-size: 9px;
+    padding: 2px 4px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    color: var(--ford-blue);
+  }
+
+  /* ===== WINDSHIELD SUB ROW ===== */
+  .sub-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 8.5px;
+    padding: 1px 4px 1px 22px;
+    border-bottom: 1px solid #ddd;
+    background: #fafafa;
+  }
+  .sub-row label { display: flex; align-items: center; gap: 2px; }
+
+  /* ===== SECTION 2 - UNDER HOOD ===== */
+  .battery-row {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--light-border);
+    padding: 2px 4px;
+    min-height: 22px;
+    gap: 4px;
+  }
+  .battery-row .tri { flex-shrink: 0; }
+  .battery-inputs { display: flex; gap: 6px; align-items: center; font-size: 8.5px; flex-wrap: wrap; }
+  .battery-inputs input[type="text"] { width: 35px; }
+  .temp-input { width: 32px; }
+
+  /* ===== SECTION 3 - UNDER VEHICLE ===== */
+  .radio-group { display: flex; gap: 8px; align-items: center; font-size: 8.5px; }
+  .radio-group label { display: flex; align-items: center; gap: 2px; }
+  .sub-section-header {
+    background: var(--section-bg);
+    font-weight: bold;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    color: var(--ford-blue);
+    text-transform: uppercase;
+  }
+
+  /* ===== SECTION 4 - BRAKE ===== */
+  .brake-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .brake-quadrant {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2px 0;
+  }
+  .brake-quadrant:nth-child(even) { border-right: none; }
+  .brake-quadrant:nth-child(n+3) { border-bottom: none; }
+  .brake-quad-header {
+    font-weight: bold;
+    font-size: 9px;
+    color: var(--ford-blue);
+    padding: 2px 4px;
+    background: var(--section-bg);
+    border-bottom: 1px solid #ccc;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .brake-quad-header input[type="text"] { width: 28px; }
+  .brake-not-performed {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 6px;
+    font-size: 9px;
+    font-weight: bold;
+    border-bottom: 1px solid var(--light-border);
+    background: #fff8e1;
+  }
+
+  /* ===== SECTION 5 - TIRE ===== */
+  .tire-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .tire-quadrant {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+  .tire-quadrant:nth-child(even) { border-right: none; }
+  .tire-quadrant:nth-child(n+3) { border-bottom: none; }
+  .tire-quad-header {
+    font-weight: bold;
+    font-size: 9px;
+    color: var(--ford-blue);
+    padding: 2px 4px;
+    background: var(--section-bg);
+    border-bottom: 1px solid #ccc;
+    text-transform: uppercase;
+  }
+  .tire-depth-row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 4px;
+    font-size: 8.5px;
+    border-bottom: 1px solid #ddd;
+  }
+  .tire-depth-row input[type="text"] { width: 28px; }
+  .wear-label { font-size: 8px; font-weight: bold; color: #555; }
+  .wear-checks { display: flex; flex-wrap: wrap; gap: 3px; padding: 2px 4px; }
+  .wear-checks label { display: flex; align-items: center; gap: 2px; font-size: 8px; }
+  .tire-psi-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 6px;
+    font-size: 9px;
+    border-bottom: 1px solid var(--light-border);
+    background: #fff8e1;
+    flex-wrap: wrap;
+  }
+  .tire-psi-row input[type="text"] { width: 32px; }
+  .tire-recommend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 6px;
+    font-size: 9px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--light-border);
+  }
+  .tire-recommend label { display: flex; align-items: center; gap: 3px; font-weight: bold; }
+  .tire-warning { font-size: 7.5px; color: #555; padding: 2px 6px; font-style: italic; }
+
+  /* ===== SECTION 6 - FLUIDS ===== */
+  .oil-message-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 6px;
+    font-size: 9px;
+    border-bottom: 1px solid var(--light-border);
+    background: #fff8e1;
+    font-weight: bold;
+  }
+  .oil-message-row label { display: flex; align-items: center; gap: 3px; }
+
+  /* ===== COMMENTS & SIGNATURES ===== */
+  .comments-section {
+    margin-top: 5px;
+    border: 1.5px solid var(--border);
+    padding: 4px 6px;
+  }
+  .comments-label { font-weight: bold; font-size: 10px; color: var(--ford-blue); text-transform: uppercase; margin-bottom: 2px; }
+  .sig-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+  .sig-field { flex: 1; min-width: 120px; }
+  .sig-field label { display: block; font-size: 8px; font-weight: bold; color: #555; text-transform: uppercase; }
+  .sig-field input[type="text"] { width: 100%; }
+  .declined-row { display: flex; align-items: center; gap: 4px; margin-top: 4px; font-size: 9px; font-weight: bold; }
+
+  /* ===== NEXT APPOINTMENT ===== */
+  .appt-section {
+    margin-top: 5px;
+    border: 1.5px solid var(--ford-blue);
+    background: var(--ford-blue);
+  }
+  .appt-header {
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    padding: 3px 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .appt-body {
+    background: #fff;
+    display: flex;
+    gap: 6px;
+    padding: 4px 6px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .appt-field { flex: 1; min-width: 100px; }
+  .appt-field label { display: block; font-size: 8px; font-weight: bold; color: #555; text-transform: uppercase; }
+  .appt-field input[type="text"] { width: 100%; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 5px;
+    border: 1.5px solid var(--border);
+    padding: 4px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 8px;
+    background: #f5f5f5;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .footer-logo {
+    font-size: 11px;
+    font-weight: 900;
+    color: var(--ford-blue);
+    letter-spacing: 1px;
+  }
+  .footer-copies { display: flex; gap: 8px; font-size: 7.5px; font-weight: bold; }
+  .copy-white { background: #fff; padding: 1px 4px; border: 1px solid #aaa; }
+  .copy-yellow { background: #ffee58; padding: 1px 4px; border: 1px solid #aaa; }
+  .copy-pink { background: #f8bbd0; padding: 1px 4px; border: 1px solid #aaa; }
+  .footer-copy { font-size: 7px; color: #666; }
+
+  /* ===== UTILITY ===== */
+  .flex { display: flex; }
+  .gap-4 { gap: 4px; }
+  .fw-bold { font-weight: bold; }
+  .fs-8 { font-size: 8px; }
+  .fs-9 { font-size: 9px; }
+  .w-full { width: 100%; }
+  .color-blue { color: var(--ford-blue); }
+  .mt-2 { margin-top: 2px; }
+
+  /* ===== PRINT STYLES ===== */
+  @media print {
+    body { background: #fff; font-size: 9px; }
+    .no-print-bar { display: none !important; }
+    .page {
+      width: 100%;
+      margin: 0;
+      padding: 5mm 6mm;
+      box-shadow: none;
+    }
+    .tri { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .section-header, .quad-header, .tire-quad-header, .brake-quad-header,
+    .sub-section-header, .appt-header {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+    input[type="text"] { border-bottom: 1px solid #333; }
+    @page { margin: 8mm; size: letter portrait; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PRINT & RESET BUTTONS -->
+<div class="no-print-bar">
+  <button class="btn btn-print" onclick="window.print()">🖨️ Print Form</button>
+  <button class="btn btn-reset" onclick="resetForm()">🔄 Reset Form</button>
+</div>
+
+<div class="page">
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-field">
+        <label>Date</label>
+        <input type="text" id="hdr-date" placeholder="MM/DD/YY" style="width:100%">
+      </div>
+      <div class="header-field">
+        <label>Customer Name</label>
+        <input type="text" id="hdr-customer" style="width:100%">
+      </div>
+      <div class="header-field">
+        <label>Service Advisor</label>
+        <input type="text" id="hdr-advisor" style="width:100%">
+      </div>
+      <div class="header-field">
+        <label>Dealer Code</label>
+        <input type="text" id="hdr-dealer" style="width:100%">
+      </div>
+      <div class="header-field">
+        <label>R.O.#</label>
+        <input type="text" id="hdr-ro" style="width:100%">
+      </div>
+      <div class="header-field">
+        <label>VIN (First 2 / Last 8 Digits)</label>
+        <input type="text" id="hdr-vin" placeholder="__ ________" style="width:100%">
+      </div>
+      <div class="header-field" style="grid-column:1/3; border-right:none;">
+        <label>Odometer</label>
+        <input type="text" id="hdr-odometer" style="width:160px">
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="title-your">your</div>
+      <div class="title-vehicle">vehicle</div>
+      <div class="title-report">report</div>
+      <div class="title-card">card</div>
+    </div>
+
+    <div class="header-right">
+      <div>
+        <div class="check-row">
+          <input type="checkbox" id="chk-validation">
+          <label for="chk-validation" style="cursor:pointer;">Validation Record Checked and Updated</label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="chk-recalls">
+          <label for="chk-recalls" style="cursor:pointer;">Checked and Completed Open Field Service Actions (Recalls)</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <strong>LEGEND:</strong>
+    <div class="legend-item leg-ok">✔ CHECKED OK</div>
+    <div class="legend-item leg-fut">✔ REQUIRES FUTURE ATTENTION</div>
+    <div class="legend-item leg-imm">✔ REQUIRES IMMEDIATE ATTENTION</div>
+    <div class="legend-item" style="color:#888;">☐ NOT YET INSPECTED</div>
+    <span style="font-size:8px;color:#555;margin-left:auto;font-style:italic;">Click indicators to cycle status</span>
+  </div>
+
+  <!-- ===== SECTION 1: 360° PERIMETER ===== -->
+  <div class="section">
+    <div class="section-header">
+      <span>1. Visual 360° Perimeter Inspection</span>
+    </div>
+    <div class="perimeter-grid">
+
+      <!-- FRONT LEFT -->
+      <div class="perimeter-quadrant">
+        <div class="quad-header">Front Left (LF)</div>
+        <!-- Windshield -->
+        <div class="insp-row" style="flex-direction:column;align-items:flex-start;">
+          <div style="display:flex;align-items:center;width:100%;gap:4px;">
+            <div class="insp-indicators">
+              <span class="tri" title="Click to cycle status" onclick="cycleTri(this)"></span>
+            </div>
+            <div class="insp-label">Windshield (XWSLD)</div>
+          </div>
+          <div class="sub-row">
+            <label><input type="checkbox" class="form-chk"> Cracked</label>
+            <label><input type="checkbox" class="form-chk"> Chipped</label>
+            <label><input type="checkbox" class="form-chk"> Sandblasted</label>
+          </div>
+        </div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Washer system (XFTWP)</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Wiper/arm (XFTWP)</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Headlight / DRL</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Fog lamp</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Signal light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Hazard light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Dome light</div></div>
+      </div>
+
+      <!-- FRONT RIGHT -->
+      <div class="perimeter-quadrant">
+        <div class="quad-header">Front Right (RF)</div>
+        <div class="insp-row" style="flex-direction:column;align-items:flex-start;">
+          <div style="display:flex;align-items:center;width:100%;gap:4px;">
+            <div class="insp-indicators">
+              <span class="tri" onclick="cycleTri(this)"></span>
+            </div>
+            <div class="insp-label">Windshield (XWSLD)</div>
+          </div>
+          <div class="sub-row">
+            <label><input type="checkbox" class="form-chk"> Cracked</label>
+            <label><input type="checkbox" class="form-chk"> Chipped</label>
+            <label><input type="checkbox" class="form-chk"> Sandblasted</label>
+          </div>
+        </div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Washer system (XFTWP)</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Wiper/arm (XFTWP)</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Headlight / DRL</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Fog lamp</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Signal light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Hazard light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Dome light</div></div>
+      </div>
+
+      <!-- REAR RIGHT -->
+      <div class="perimeter-quadrant">
+        <div class="quad-header">Rear Right (RR)</div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Brake light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Signal light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Hazard light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Back-up light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Washer system (XRRWP)</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Wiper/arm (XRRWP)</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">High mounted stop lamp</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Licence light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Trunk light</div></div>
+      </div>
+
+      <!-- REAR LEFT -->
+      <div class="perimeter-quadrant">
+        <div class="quad-header">Rear Left (LR)</div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Brake light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Signal light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Hazard light</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Back-up light</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: UNDER HOOD ===== -->
+  <div class="section">
+    <div class="section-header">2. Visual Under Hood Inspection</div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Drive belt(s) <span class="op">(XDRVB)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Air filter and minder (+ battery A/C filter on hybrid) <span class="op">(XAIRF)</span></div></div>
+    <div class="insp-row">
+      <span class="tri" onclick="cycleTri(this)"></span>
+      <div class="insp-label" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
+        Radiator, hoses/clamps &amp; coolant condition to:
+        <input type="text" class="temp-input form-input" placeholder="-__">°C
+        <span class="op">(XRADH)</span>
+      </div>
+    </div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Horn</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Interior hood light</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Block heater <span class="op">(XBHTR)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Heater hoses/clamps <span class="op">(XHTRH)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Air conditioning hoses <span class="op">(XACHS)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Cabin/pollen air filter (if equipped) <span class="op">(XCABF)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Battery/cables/clamps</div></div>
+    <!-- Battery Performance 1 -->
+    <div class="battery-row">
+      <span class="tri" onclick="cycleTri(this)"></span>
+      <div class="insp-label" style="flex:0 0 auto;min-width:140px;">Battery performance 1 <span class="op">(XBATT)</span></div>
+      <div class="battery-inputs">
+        COLD CRANKING AMPS — Factory Specs:
+        <input type="text" class="form-input" placeholder="____" style="width:40px">
+        Actual:
+        <input type="text" class="form-input" placeholder="____" style="width:40px">
+      </div>
+    </div>
+    <!-- Battery Performance 2 -->
+    <div class="battery-row">
+      <span class="tri" onclick="cycleTri(this)"></span>
+      <div class="insp-label" style="flex:0 0 auto;min-width:140px;">Battery performance 2 <span class="op">(XBATT)</span></div>
+      <div class="battery-inputs">
+        COLD CRANKING AMPS — Factory Specs:
+        <input type="text" class="form-input" placeholder="____" style="width:40px">
+        Actual:
+        <input type="text" class="form-input" placeholder="____" style="width:40px">
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: UNDER VEHICLE ===== -->
+  <div class="section">
+    <div class="section-header">3. Visual Under Vehicle Inspection</div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Steering components <span class="op">(XSTRG)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Suspension components <span class="op">(XSUSP)</span></div></div>
+    <div class="insp-row">
+      <span class="tri" onclick="cycleTri(this)"></span>
+      <div class="insp-label" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        Shocks <span class="op">(XSHCK)</span>
+        <div class="radio-group">
+          <label><input type="radio" name="shocks" value="leakage"> Leakage</label>
+          <label><input type="radio" name="shocks" value="damage"> Damage</label>
+        </div>
+      </div>
+    </div>
+    <div class="insp-row">
+      <span class="tri" onclick="cycleTri(this)"></span>
+      <div class="insp-label" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        Struts <span class="op">(XSTRT)</span>
+        <div class="radio-group">
+          <label><input type="radio" name="struts" value="leakage"> Leakage</label>
+          <label><input type="radio" name="struts" value="damage"> Damage</label>
+        </div>
+      </div>
+    </div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Exhaust system <span class="op">(XEXHT)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">CV drive axle boots (if equipped) <span class="op">(XCVBT)</span></div></div>
+
+    <div class="sub-section-header">Check for Leaks</div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Engine oil <span class="op">(XDILK)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Transmission <span class="op">(XTRAN)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Power steering</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Coolant <span class="op">(XCOOL)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Fuel <span class="op">(XFUEL)</span></div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Fuel filter (except diesel) <span class="op">(XFUILF)</span></div></div>
+  </div>
+
+  <!-- ===== SECTION 4: BRAKE INSPECTION ===== -->
+  <div class="section">
+    <div class="section-header">
+      <span>4. Visual Brake Inspection</span>
+      <span class="op-codes">SEE OVER FOR OP CODES</span>
+    </div>
+    <div class="brake-not-performed">
+      <input type="checkbox" id="chk-brake-not" class="form-chk">
+      <label for="chk-brake-not" style="cursor:pointer;">BRAKE INSPECTION NOT PERFORMED WITH THIS SERVICE</label>
+    </div>
+    <div class="brake-grid">
+
+      <!-- RF -->
+      <div class="brake-quadrant">
+        <div class="brake-quad-header">
+          RF — Pad/Lining: <input type="text" class="form-input" placeholder="__"> mm
+        </div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Rotor</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Caliper</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Lines/hoses</div></div>
+      </div>
+
+      <!-- RR -->
+      <div class="brake-quadrant">
+        <div class="brake-quad-header">
+          RR — Pad/Lining: <input type="text" class="form-input" placeholder="__"> mm
+        </div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Rotor/drum</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Caliper/wheel cylinder</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Lines/hoses</div></div>
+      </div>
+
+      <!-- LF -->
+      <div class="brake-quadrant">
+        <div class="brake-quad-header">
+          LF — Pad/Lining: <input type="text" class="form-input" placeholder="__"> mm
+        </div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Rotor</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Caliper</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Lines/hoses</div></div>
+      </div>
+
+      <!-- LR -->
+      <div class="brake-quadrant">
+        <div class="brake-quad-header">
+          LR — Pad/Lining: <input type="text" class="form-input" placeholder="__"> mm
+        </div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Rotor/drum</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Caliper/wheel cylinder</div></div>
+        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Lines/hoses</div></div>
+      </div>
+
+    </div>
+    <div class="insp-row" style="border-top:1px solid var(--border);">
+      <span class="tri" onclick="cycleTri(this)"></span>
+      <div class="insp-label"><strong>Parking brake operation</strong></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: TIRE INSPECTION ===== -->
+  <div class="section">
+    <div class="section-header">5. Visual Tire Inspection</div>
+    <!-- PSI Row -->
+    <div class="tire-psi-row">
+      <label>
+        <input type="checkbox" id="chk-pressure" class="form-chk">
+        <strong>PRESSURE SET TO FACTORY PSI</strong>
+      </label>
+      &nbsp;|&nbsp;
+      FRONT: <input type="text" class="form-input" placeholder="__" style="width:32px"> psi &nbsp;
+      REAR: <input type="text" class="form-input" placeholder="__" style="width:32px"> psi &nbsp;
+      SPARE: <input type="text" class="form-input" placeholder="__" style="width:32px"> psi
+    </div>
+    <div class="tire-warning">
+      * WARNING: Tire pressures should be checked when tires are cold. Check your owner's manual for correct inflation specifications.
+    </div>
+
+    <div class="tire-grid">
+
+      <!-- RF TIRE -->
+      <div class="tire-quadrant">
+        <div class="tire-quad-header">RF — Front Right</div>
+        <div class="tire-depth-row">
+          <span class="tri" onclick="cycleTri(this)"></span>
+          Tread Depth: <input type="text" class="form-input" placeholder="__" style="width:28px"> /32 nds
+        </div>
+        <div class="wear-label" style="padding:2px 4px;">Wear indicators:</div>
+        <div class="wear-checks">
+          <label><input type="checkbox" class="form-chk"> Toe wear</label>
+          <label><input type="checkbox" class="form-chk"> Camber wear</label>
+          <label><input type="checkbox" class="form-chk"> Centre wear</label>
+          <label><input type="checkbox" class="form-chk"> Edge wear</label>
+          <label><input type="checkbox" class="form-chk"> Patch wear</label>
+          <label><input type="checkbox" class="form-chk"> Cup wear</label>
+        </div>
+      </div>
+
+      <!-- LF TIRE -->
+      <div class="tire-quadrant">
+        <div class="tire-quad-header">LF — Front Left</div>
+        <div class="tire-depth-row">
+          <span class="tri" onclick="cycleTri(this)"></span>
+          Tread Depth: <input type="text" class="form-input" placeholder="__" style="width:28px"> /32 nds
+        </div>
+        <div class="wear-label" style="padding:2px 4px;">Wear indicators:</div>
+        <div class="wear-checks">
+          <label><input type="checkbox" class="form-chk"> Toe wear</label>
+          <label><input type="checkbox" class="form-chk"> Camber wear</label>
+          <label><input type="checkbox" class="form-chk"> Centre wear</label>
+          <label><input type="checkbox" class="form-chk"> Edge wear</label>
+          <label><input type="checkbox" class="form-chk"> Patch wear</label>
+          <label><input type="checkbox" class="form-chk"> Cup wear</label>
+        </div>
+      </div>
+
+      <!-- RR TIRE -->
+      <div class="tire-quadrant">
+        <div class="tire-quad-header">RR — Rear Right</div>
+        <div class="tire-depth-row">
+          <span class="tri" onclick="cycleTri(this)"></span>
+          Outer: <input type="text" class="form-input" placeholder="__" style="width:24px"> /32 nds &nbsp;
+          Inner: <input type="text" class="form-input" placeholder="__" style="width:24px"> /32 nds
+        </div>
+        <div class="wear-label" style="padding:2px 4px;">Wear indicators:</div>
+        <div class="wear-checks">
+          <label><input type="checkbox" class="form-chk"> Toe wear</label>
+          <label><input type="checkbox" class="form-chk"> Camber wear</label>
+          <label><input type="checkbox" class="form-chk"> Centre wear</label>
+          <label><input type="checkbox" class="form-chk"> Edge wear</label>
+          <label><input type="checkbox" class="form-chk"> Patch wear</label>
+          <label><input type="checkbox" class="form-chk"> Cup wear</label>
+        </div>
+      </div>
+
+      <!-- LR TIRE -->
+      <div class="tire-quadrant">
+        <div class="tire-quad-header">LR — Rear Left</div>
+        <div class="tire-depth-row">
+          <span class="tri" onclick="cycleTri(this)"></span>
+          Outer: <input type="text" class="form-input" placeholder="__" style="width:24px"> /32 nds &nbsp;
+          Inner: <input type="text" class="form-input" placeholder="__" style="width:24px"> /32 nds
+        </div>
+        <div class="wear-label" style="padding:2px 4px;">Wear indicators:</div>
+        <div class="wear-checks">
+          <label><input type="checkbox" class="form-chk"> Toe wear</label>
+          <label><input type="checkbox" class="form-chk"> Camber wear</label>
+          <label><input type="checkbox" class="form-chk"> Centre wear</label>
+          <label><input type="checkbox" class="form-chk"> Edge wear</label>
+          <label><input type="checkbox" class="form-chk"> Patch wear</label>
+          <label><input type="checkbox" class="form-chk"> Cup wear</label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tire-recommend">
+      <strong>RECOMMEND:</strong>
+      <label><input type="checkbox" class="form-chk"> Rotation (XTROT)</label>
+      <label><input type="checkbox" class="form-chk"> Replacement (XTIRE)</label>
+      <label><input type="checkbox" class="form-chk"> Alignment (XALIG)</label>
+      <label><input type="checkbox" class="form-chk"> Balance</label>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: FLUID LEVELS ===== -->
+  <div class="section">
+    <div class="section-header">6. Visual Fluid Level Check and Fill</div>
+    <div class="oil-message-row">
+      CHANGE OIL MESSAGE:
+      <label><input type="checkbox" class="form-chk"> ON</label>
+      <label><input type="checkbox" class="form-chk"> RESET</label>
+      <label><input type="checkbox" class="form-chk"> N/A</label>
+    </div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Engine oil</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Window washer fluid</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Transmission fluid level and colour</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Brake fluid level and colour</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Power steering fluid</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Coolant recovery reservoir fluid level</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">4x4 transfer case, front drive, clutch reservoir fluid</div></div>
+  </div>
+
+  <!-- ===== SECTION 7: DIESEL INSPECTION ===== -->
+  <div class="section">
+    <div class="section-header">7. Visual Diesel Inspection</div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Air filter restriction gauge and housing</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Water in fuel dash light</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Charge air cooling piping and air intake system</div></div>
+    <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Turbocharger</div></div>
+  </div>
+
+  <!-- ===== COMMENTS & SIGNATURES ===== -->
+  <div class="comments-section">
+    <div class="comments-label">Comments:</div>
+    <textarea class="form-input" rows="4" style="border:1px solid #ccc; margin-top:2px;" id="comments"></textarea>
+    <div class="sig-row">
+      <div class="sig-field">
+        <label for="sig-tech">Technician</label>
+        <input type="text" id="sig-tech" class="form-input">
+      </div>
+      <div class="sig-field">
+        <label for="sig-customer">Customer Signature</label>
+        <input type="text" id="sig-customer" class="form-input" placeholder="Signature">
+      </div>
+    </div>
+    <div class="declined-row">
+      <input type="checkbox" id="chk-declined" class="form-chk">
+      <label for="chk-declined" style="cursor:pointer;">CUSTOMER DECLINED FORD-RECOMMENDED MAINTENANCE</label>
+    </div>
+  </div>
+
+  <!-- ===== NEXT MAINTENANCE APPOINTMENT ===== -->
+  <div class="appt-section">
+    <div class="appt-header">your next maintenance appointment</div>
+    <div class="appt-body">
+      <div class="appt-field" style="flex:2;">
+        <label for="appt-service">Next Maintenance Service</label>
+        <input type="text" id="appt-service" class="form-input">
+      </div>
+      <div class="appt-field">
+        <label for="appt-price">Price*</label>
+        <input type="text" id="appt-price" class="form-input" placeholder="$">
+      </div>
+      <div class="appt-field">
+        <label for="appt-date">Next Appointment Date (MM/DD/YY)</label>
+        <input type="text" id="appt-date" class="form-input" placeholder="MM/DD/YY">
+      </div>
+      <div class="appt-field">
+        <label for="appt-time">Time</label>
+        <input type="text" id="appt-time" class="form-input" placeholder="HH:MM">
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="footer">
+    <div class="footer-logo">FORD<br><span style="font-size:7px;font-weight:normal;letter-spacing:0;">Genuine Parts &amp; Service</span></div>
+    <div class="footer-copies">
+      <span class="copy-white">WHITE – CUSTOMER COPY</span>
+      <span class="copy-yellow">YELLOW – SERVICE FILE COPY</span>
+      <span class="copy-pink">PINK – FOLLOW-UP COPY</span>
+    </div>
+    <div class="footer-copy">©2009 Ford Motor Company of Canada, Limited. All rights reserved.</div>
+  </div>
+
+</div><!-- end .page -->
+
+<script>
+/* ===== TRI-STATE INDICATOR LOGIC ===== */
+const STATES = ['', 'ok', 'future', 'now'];
+const SYMBOLS = { '': '', ok: '✔', future: '✔', now: '✔' };
+
+function cycleTri(el) {
+  const current = el.dataset.state || '';
+  const idx = STATES.indexOf(current);
+  const next = STATES[(idx + 1) % STATES.length];
+  el.dataset.state = next;
+  el.textContent = SYMBOLS[next];
+  el.title = {
+    '': 'Click to mark: Checked OK',
+    ok: 'Click to mark: Requires Future Attention',
+    future: 'Click to mark: Requires Immediate Attention',
+    now: 'Click to clear'
+  }[next];
+}
+
+/* ===== RESET FORM ===== */
+function resetForm() {
+  if (!confirm('Reset all form fields? This cannot be undone.')) return;
+
+  // Reset all text inputs
+  document.querySelectorAll('input[type="text"]').forEach(el => { el.value = ''; });
+
+  // Reset all checkboxes
+  document.querySelectorAll('input[type="checkbox"]').forEach(el => { el.checked = false; });
+
+  // Reset all radio buttons
+  document.querySelectorAll('input[type="radio"]').forEach(el => { el.checked = false; });
+
+  // Reset textareas
+  document.querySelectorAll('textarea').forEach(el => { el.value = ''; });
+
+  // Reset all tri-state indicators
+  document.querySelectorAll('.tri').forEach(el => {
+    el.dataset.state = '';
+    el.textContent = '';
+    el.title = 'Click to mark: Checked OK';
+  });
+}
+</script>
+</body>
+</html>
