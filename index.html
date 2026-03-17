@@ -217,6 +217,16 @@
   .perimeter-quadrant:nth-child(4) { border-right: none; }
   .perimeter-quadrant:nth-child(3),
   .perimeter-quadrant:nth-child(4) { border-bottom: none; }
+
+  /* ===== REAR CENTRE SUB-SECTION ===== */
+  .rear-centre-rows {
+    max-width: 280px;
+    margin: 0 auto;
+    padding: 2px 0 4px;
+  }
+  .rear-centre-rows .insp-row:last-child { border-bottom: none; }
+  .sub-section-header--centre { text-align: center; }
+
   .quad-header {
     background: var(--section-bg);
     font-weight: bold;
@@ -712,11 +722,6 @@
         <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Signal light</div></div>
         <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Hazard light</div></div>
         <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Back-up light</div></div>
-        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Washer system (XRRWP)</div></div>
-        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Wiper/arm (XRRWP)</div></div>
-        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">High mounted stop lamp</div></div>
-        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Licence light</div></div>
-        <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Trunk light</div></div>
       </div>
 
       <!-- REAR LEFT -->
@@ -728,6 +733,16 @@
         <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Back-up light</div></div>
       </div>
 
+    </div>
+
+    <!-- REAR — CENTRE (items not tied to left or right) -->
+    <div class="sub-section-header sub-section-header--centre">Rear — Centre</div>
+    <div class="rear-centre-rows">
+      <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Washer system (XRRWP)</div></div>
+      <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Wiper/arm (XRRWP)</div></div>
+      <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">High mounted stop lamp</div></div>
+      <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Licence light</div></div>
+      <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Trunk light</div></div>
     </div>
   </div>
 
