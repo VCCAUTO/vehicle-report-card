@@ -1,6 +1,6 @@
-# Ford Vehicle Report Card
+# Vehicle Report Card
 
-An interactive, fillable, and printable web app that replicates the Ford "Your Vehicle Report Card" multi-point inspection form.
+An interactive, fillable, and printable web app that replicates the "Your Vehicle Report Card" multi-point vehicle inspection form.
 
 ## Features
 
@@ -19,9 +19,9 @@ An interactive, fillable, and printable web app that replicates the Ford "Your V
   - 🔴 Red — Requires Immediate Attention
   - ☐ Empty — Not yet inspected
 - **All fields fillable** — text inputs, checkboxes, radio buttons, and text areas
-- **Print-optimized** — clean letter-paper output via `@media print` CSS
+- **Print-optimized** — clean single-page letter-paper output via `@media print` CSS
 - **Print & Reset Form** buttons
-- **Ford brand styling** — blue `#003478` and red `#d4213d`
+- **Brand styling** — dark blue `#003478` and accent red `#d4213d`
 
 ## How to Use
 
@@ -40,12 +40,9 @@ An interactive, fillable, and printable web app that replicates the Ford "Your V
 - For best results, set paper size to **Letter (8.5" × 11")** in portrait orientation.
 - Enable **"Background graphics"** in your browser's print settings to preserve colored status indicators and section headers.
 - To save as PDF, choose **"Save as PDF"** as the printer destination.
+- The form is designed to fit on a **single page** — the print stylesheet automatically scales content to fit.
 
 ## Requirements
 
 - Any modern web browser (Chrome, Firefox, Safari, Edge)
 - No internet connection required — fully self-contained
-
-## License
-
-©2009 Ford Motor Company of Canada, Limited. Ford branding used for internal service documentation purposes only.

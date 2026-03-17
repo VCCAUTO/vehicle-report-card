@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ford Vehicle Report Card</title>
+<title>Vehicle Report Card</title>
 <style>
   /* ===== RESET & BASE ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -14,10 +14,10 @@
     color: #000;
   }
 
-  /* ===== FORD BRAND COLORS ===== */
+  /* ===== BRAND COLORS ===== */
   :root {
-    --ford-blue: #003478;
-    --ford-red: #d4213d;
+    --vrc-blue: #003478;
+    --vrc-red: #d4213d;
     --green: #2e7d32;
     --blue-check: #1565c0;
     --red-check: #d4213d;
@@ -55,8 +55,8 @@
     transition: opacity 0.2s;
   }
   .btn:hover { opacity: 0.85; }
-  .btn-print { background: var(--ford-blue); color: #fff; }
-  .btn-reset { background: var(--ford-red); color: #fff; }
+  .btn-print { background: var(--vrc-blue); color: #fff; }
+  .btn-reset { background: var(--vrc-red); color: #fff; }
 
   /* ===== INPUTS ===== */
   input[type="text"], textarea {
@@ -105,10 +105,10 @@
     padding: 4px 6px;
     border-right: 1px solid var(--border);
   }
-  .title-your { font-size: 13px; font-weight: bold; color: var(--ford-red); letter-spacing: 1px; text-transform: uppercase; }
-  .title-vehicle { font-size: 18px; font-weight: 900; color: var(--ford-blue); text-transform: uppercase; letter-spacing: 1px; }
-  .title-report { font-size: 13px; font-weight: bold; color: var(--ford-blue); text-transform: uppercase; letter-spacing: 1px; }
-  .title-card { font-size: 11px; font-weight: bold; color: var(--ford-blue); text-transform: uppercase; }
+  .title-your { font-size: 13px; font-weight: bold; color: var(--vrc-red); letter-spacing: 1px; text-transform: uppercase; }
+  .title-vehicle { font-size: 18px; font-weight: 900; color: var(--vrc-blue); text-transform: uppercase; letter-spacing: 1px; }
+  .title-report { font-size: 13px; font-weight: bold; color: var(--vrc-blue); text-transform: uppercase; letter-spacing: 1px; }
+  .title-card { font-size: 11px; font-weight: bold; color: var(--vrc-blue); text-transform: uppercase; }
 
   .header-right {
     width: 130px;
@@ -135,12 +135,12 @@
   .legend-item { display: flex; align-items: center; gap: 3px; }
   .leg-ok   { color: var(--green); }
   .leg-fut  { color: var(--blue-check); }
-  .leg-imm  { color: var(--ford-red); }
+  .leg-imm  { color: var(--vrc-red); }
 
   /* ===== SECTION HEADER ===== */
   .section { margin-top: 5px; border: 1.5px solid var(--border); }
   .section-header {
-    background: var(--ford-blue);
+    background: var(--vrc-blue);
     color: #fff;
     font-weight: bold;
     font-size: 10px;
@@ -170,7 +170,7 @@
   }
   .tri[data-state="ok"]     { color: var(--green); border-color: var(--green); background: #e8f5e9; }
   .tri[data-state="future"] { color: var(--blue-check); border-color: var(--blue-check); background: #e3f2fd; }
-  .tri[data-state="now"]    { color: var(--ford-red); border-color: var(--ford-red); background: #fce4ec; }
+  .tri[data-state="now"]    { color: var(--vrc-red); border-color: var(--vrc-red); background: #fce4ec; }
 
   /* ===== INSPECTION ROW ===== */
   .insp-row {
@@ -208,7 +208,7 @@
     text-align: center;
     border-bottom: 1px solid var(--border);
     text-transform: uppercase;
-    color: var(--ford-blue);
+    color: var(--vrc-blue);
   }
 
   /* ===== WINDSHIELD SUB ROW ===== */
@@ -247,7 +247,7 @@
     padding: 2px 6px;
     border-bottom: 1px solid var(--border);
     border-top: 1px solid var(--border);
-    color: var(--ford-blue);
+    color: var(--vrc-blue);
     text-transform: uppercase;
   }
 
@@ -267,7 +267,7 @@
   .brake-quad-header {
     font-weight: bold;
     font-size: 9px;
-    color: var(--ford-blue);
+    color: var(--vrc-blue);
     padding: 2px 4px;
     background: var(--section-bg);
     border-bottom: 1px solid #ccc;
@@ -304,7 +304,7 @@
   .tire-quad-header {
     font-weight: bold;
     font-size: 9px;
-    color: var(--ford-blue);
+    color: var(--vrc-blue);
     padding: 2px 4px;
     background: var(--section-bg);
     border-bottom: 1px solid #ccc;
@@ -364,7 +364,7 @@
     border: 1.5px solid var(--border);
     padding: 4px 6px;
   }
-  .comments-label { font-weight: bold; font-size: 10px; color: var(--ford-blue); text-transform: uppercase; margin-bottom: 2px; }
+  .comments-label { font-weight: bold; font-size: 10px; color: var(--vrc-blue); text-transform: uppercase; margin-bottom: 2px; }
   .sig-row {
     display: flex;
     gap: 8px;
@@ -380,8 +380,8 @@
   /* ===== NEXT APPOINTMENT ===== */
   .appt-section {
     margin-top: 5px;
-    border: 1.5px solid var(--ford-blue);
-    background: var(--ford-blue);
+    border: 1.5px solid var(--vrc-blue);
+    background: var(--vrc-blue);
   }
   .appt-header {
     color: #fff;
@@ -420,7 +420,7 @@
   .footer-logo {
     font-size: 11px;
     font-weight: 900;
-    color: var(--ford-blue);
+    color: var(--vrc-blue);
     letter-spacing: 1px;
   }
   .footer-copies { display: flex; gap: 8px; font-size: 7.5px; font-weight: bold; }
@@ -436,8 +436,20 @@
   .fs-8 { font-size: 8px; }
   .fs-9 { font-size: 9px; }
   .w-full { width: 100%; }
-  .color-blue { color: var(--ford-blue); }
+  .color-blue { color: var(--vrc-blue); }
   .mt-2 { margin-top: 2px; }
+
+  /* ===== TWO-COLUMN SECTION LAYOUT ===== */
+  .two-col-sections {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  .two-col-sections .section {
+    flex: 1;
+    min-width: 0;
+    margin-top: 0;
+  }
 
   /* ===== PRINT STYLES ===== */
   @media print {
@@ -445,12 +457,12 @@
     @page { size: letter portrait; margin: 5mm; }
 
     /* --- Scale the whole document to fit one page ---
-       Compact CSS below brings natural height to ~370mm;
-       zoom:0.70 reduces that to ~259mm, fitting in the
-       269mm usable height (11" - 2×5mm margins).
-       Chrome/Edge/Safari support zoom; Firefox falls back
-       to the compact layout which is still much smaller. */
-    html { zoom: 0.70; }
+       2-column layout reduces natural compact height from ~1400px to ~1170px;
+       zoom:0.75 reduces that to ~878px, comfortably fitting in the
+       ~1018px usable height (11" at 96dpi minus 2×5mm margins).
+       zoom is supported in all modern browsers (Chrome, Edge, Safari,
+       Firefox 126+). */
+    html { zoom: 0.75; }
 
     /* --- Global color-adjust so backgrounds print --- */
     * {
@@ -520,6 +532,9 @@
 
     /* --- Inputs --- */
     input[type="text"] { height: 13px; border-bottom: 1px solid #333; }
+
+    /* --- Two-column layout compact gap --- */
+    .two-col-sections { gap: 3px; }
   }
 </style>
 </head>
@@ -581,7 +596,7 @@
         </div>
         <div class="check-row">
           <input type="checkbox" id="chk-recalls">
-          <label for="chk-recalls" style="cursor:pointer;">Checked and Completed Open Field Service Actions (Recalls)</label>
+          <label for="chk-recalls" style="cursor:pointer;">Checked and Completed Open Safety Recalls</label>
         </div>
       </div>
     </div>
@@ -681,6 +696,8 @@
     </div>
   </div>
 
+  <div class="two-col-sections">
+
   <!-- ===== SECTION 2: UNDER HOOD ===== -->
   <div class="section">
     <div class="section-header">2. Visual Under Hood Inspection</div>
@@ -761,6 +778,8 @@
     <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Fuel <span class="op">(XFUEL)</span></div></div>
     <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Fuel filter (except diesel) <span class="op">(XFUILF)</span></div></div>
   </div>
+
+  </div><!-- end two-col-sections (S2+S3) -->
 
   <!-- ===== SECTION 4: BRAKE INSPECTION ===== -->
   <div class="section">
@@ -926,6 +945,8 @@
     </div>
   </div>
 
+  <div class="two-col-sections">
+
   <!-- ===== SECTION 6: FLUID LEVELS ===== -->
   <div class="section">
     <div class="section-header">6. Visual Fluid Level Check and Fill</div>
@@ -953,6 +974,8 @@
     <div class="insp-row"><span class="tri" onclick="cycleTri(this)"></span><div class="insp-label">Turbocharger</div></div>
   </div>
 
+  </div><!-- end two-col-sections (S6+S7) -->
+
   <!-- ===== COMMENTS & SIGNATURES ===== -->
   <div class="comments-section">
     <div class="comments-label">Comments:</div>
@@ -969,7 +992,7 @@
     </div>
     <div class="declined-row">
       <input type="checkbox" id="chk-declined" class="form-chk">
-      <label for="chk-declined" style="cursor:pointer;">CUSTOMER DECLINED FORD-RECOMMENDED MAINTENANCE</label>
+      <label for="chk-declined" style="cursor:pointer;">CUSTOMER DECLINED RECOMMENDED MAINTENANCE</label>
     </div>
   </div>
 
@@ -998,13 +1021,13 @@
 
   <!-- ===== FOOTER ===== -->
   <div class="footer">
-    <div class="footer-logo">FORD<br><span style="font-size:7px;font-weight:normal;letter-spacing:0;">Genuine Parts &amp; Service</span></div>
+    <div class="footer-logo">VEHICLE REPORT CARD</div>
     <div class="footer-copies">
       <span class="copy-white">WHITE – CUSTOMER COPY</span>
       <span class="copy-yellow">YELLOW – SERVICE FILE COPY</span>
       <span class="copy-pink">PINK – FOLLOW-UP COPY</span>
     </div>
-    <div class="footer-copy">©2009 Ford Motor Company of Canada, Limited. All rights reserved.</div>
+    
   </div>
 
 </div><!-- end .page -->
