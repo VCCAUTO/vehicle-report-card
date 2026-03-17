@@ -441,22 +441,85 @@
 
   /* ===== PRINT STYLES ===== */
   @media print {
-    body { background: #fff; font-size: 9px; }
+    /* --- Page setup: letter portrait with narrow margins --- */
+    @page { size: letter portrait; margin: 5mm; }
+
+    /* --- Scale the whole document to fit one page ---
+       Compact CSS below brings natural height to ~370mm;
+       zoom:0.70 reduces that to ~259mm, fitting in the
+       269mm usable height (11" - 2×5mm margins).
+       Chrome/Edge/Safari support zoom; Firefox falls back
+       to the compact layout which is still much smaller. */
+    html { zoom: 0.70; }
+
+    /* --- Global color-adjust so backgrounds print --- */
+    * {
+      print-color-adjust: exact !important;
+      -webkit-print-color-adjust: exact !important;
+    }
+
+    body { background: #fff; font-size: 8px; margin: 0; padding: 0; }
+
     .no-print-bar { display: none !important; }
+
+    /* --- Page wrapper fills the available width --- */
     .page {
       width: 100%;
+      min-height: unset;
       margin: 0;
-      padding: 5mm 6mm;
+      padding: 2mm 3mm;
       box-shadow: none;
     }
-    .tri { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    .section-header, .quad-header, .tire-quad-header, .brake-quad-header,
-    .sub-section-header, .appt-header {
-      print-color-adjust: exact;
-      -webkit-print-color-adjust: exact;
-    }
-    input[type="text"] { border-bottom: 1px solid #333; }
-    @page { margin: 8mm; size: letter portrait; }
+
+    /* --- Compact section spacing --- */
+    .section { margin-top: 3px; }
+    .section-header { padding: 2px 5px; font-size: 9px; }
+    .sub-section-header { padding: 1px 5px; font-size: 8px; }
+    .legend { padding: 2px 5px; gap: 8px; font-size: 8px; }
+    /* Hide "Click indicators to cycle status" hint in print */
+    .legend span[style*="margin-left:auto"] { display: none; }
+
+    /* --- Header fields --- */
+    .header-field { padding: 1px 3px; }
+
+    /* --- Inspection rows: shrink height and padding --- */
+    .insp-row    { min-height: 14px; padding: 1px 3px; }
+    .battery-row { min-height: 14px; padding: 1px 3px; }
+    .insp-label  { font-size: 8px; }
+    .sub-row     { padding: 0 2px 0 18px; font-size: 7.5px; }
+
+    /* --- Quadrant/section sub-headers --- */
+    .quad-header        { padding: 1px 3px; font-size: 8px; }
+    .brake-quad-header  { padding: 1px 3px; font-size: 8px; }
+    .tire-quad-header   { padding: 1px 3px; font-size: 8px; }
+    .brake-not-performed { padding: 1px 4px; font-size: 8px; }
+
+    /* --- Tire section --- */
+    .tire-depth-row   { padding: 1px 3px; font-size: 7.5px; }
+    .wear-label       { font-size: 7px; }
+    .wear-checks      { padding: 1px 3px; gap: 2px; }
+    .wear-checks label { font-size: 7px; }
+    .tire-psi-row     { padding: 2px 4px; font-size: 8px; }
+    .tire-warning     { display: none; }   /* omit disclaimer in print */
+    .tire-recommend   { padding: 2px 4px; font-size: 8px; }
+
+    /* --- Fluid section --- */
+    .oil-message-row { padding: 2px 4px; font-size: 8px; }
+
+    /* --- Tri-state indicators --- */
+    .tri { width: 13px; height: 13px; font-size: 9px; }
+
+    /* --- Comments, signatures, appointment, footer --- */
+    .comments-section { padding: 2px 5px; margin-top: 3px; }
+    .sig-row          { margin-top: 2px; }
+    #comments         { height: 28px; }
+    .appt-section     { margin-top: 3px; }
+    .appt-header      { padding: 2px 5px; }
+    .appt-body        { padding: 2px 5px; }
+    .footer           { margin-top: 3px; padding: 2px 5px; }
+
+    /* --- Inputs --- */
+    input[type="text"] { height: 13px; border-bottom: 1px solid #333; }
   }
 </style>
 </head>
