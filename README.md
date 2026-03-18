@@ -26,7 +26,7 @@ An interactive, fillable, and printable web app styled to [Vancouver Community C
 ## How to Use
 
 1. **Open `index.html`** in any modern web browser — no server required.
-2. **Fill in the header** fields: date, customer name, service advisor, dealer code, R.O.#, VIN, and odometer.
+2. **Fill in the header** fields: date, customer name, instructor, R.O.#, VIN, and odometer.
 3. **Work through each section** — click tri-state indicators to set the inspection status for each item.
 4. **Enter measurements** where needed (brake pad thickness in mm, tire tread depth in 32nds, etc.).
 5. **Add comments** and technician/customer signature in the Comments section.
