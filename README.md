@@ -5,7 +5,7 @@ An interactive, fillable, and printable web app styled to [Vancouver Community C
 ## Features
 
 - **Single HTML file** — no frameworks, no build tools, no dependencies
-- **VCC brand styling** — navy blue `#002855`, accent red `#C41230`, and VCC logo (inline SVG mark + wordmark)
+- **VCC brand styling** — forest green `#1B5632`, accent red `#C41230`, and VCC logo (inline SVG wedge mark)
 - **All 7 inspection sections** faithfully recreated:
   1. Visual 360° Perimeter Inspection
   2. Visual Under Hood Inspection

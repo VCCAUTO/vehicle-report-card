@@ -10,21 +10,21 @@
   body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
-    background: #dde2ea;
+    background: #dde6de;
     color: #000;
   }
 
   /* ===== VCC BRAND COLORS (Vancouver Community College) ===== */
   :root {
-    --vrc-blue: #002855;
+    --vrc-blue: #1B5632;
     --vrc-red:  #C41230;
     --green: #2e7d32;
     --blue-check: #1565c0;
     --red-check: #C41230;
     --border: #444;
     --light-border: #aaa;
-    --section-bg: #dce4ef;
-    --row-alt:  #edf2f8;
+    --section-bg: #d4e6d8;
+    --row-alt:  #eaf3eb;
   }
 
   /* ===== PAGE WRAPPER ===== */
@@ -615,19 +615,15 @@
     <div class="header-center">
       <!-- VCC Logo (Vancouver Community College) -->
       <svg class="vcc-logo-svg" xmlns="http://www.w3.org/2000/svg"
-           viewBox="0 0 200 52" width="200" height="52" role="img"
+           viewBox="0 0 200 54" width="200" height="54" role="img"
            aria-label="VCC – Vancouver Community College">
-        <!-- Mark: two angular V-chevrons, red then blue -->
-        <polygon points="0,4 9,4 22,42 35,4 44,4 29,48 15,48"  fill="var(--vrc-red)"/>
-        <polygon points="16,4 25,4 38,42 51,4 60,4 45,48 31,48" fill="var(--vrc-blue)"/>
-        <!-- VCC wordmark -->
-        <text x="68" y="33"
+        <!-- VCC brand mark: dark-green wedge (taller on right, angled top-left) -->
+        <polygon points="0,54 200,54 200,8 0,32" fill="#1B5632"/>
+        <!-- VCC wordmark in white -->
+        <text x="100" y="47"
               font-family="'Arial Black', Arial, sans-serif"
-              font-weight="900" font-size="26" fill="var(--vrc-blue)" letter-spacing="2">VCC</text>
-        <!-- Institution name -->
-        <text x="68" y="47"
-              font-family="Arial, Helvetica, sans-serif"
-              font-size="9" fill="#444">Vancouver Community College</text>
+              font-weight="900" font-size="28" fill="#fff"
+              text-anchor="middle" letter-spacing="2">VCC</text>
       </svg>
       <!-- Form title below logo -->
       <div class="title-form-name">YOUR VEHICLE REPORT CARD</div>
@@ -1072,15 +1068,16 @@
   <!-- ===== FOOTER ===== -->
   <div class="footer">
     <div class="footer-logo">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 22"
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 24"
            width="130" height="20" role="img"
            aria-label="VCC – Vancouver Community College">
-        <polygon points="0,2 5,2 12,18 19,2 24,2 16,20 8,20"  fill="var(--vrc-red)"/>
-        <polygon points="8,2 13,2 20,18 27,2 32,2 24,20 16,20" fill="var(--vrc-blue)"/>
-        <text x="38" y="14" font-family="'Arial Black', Arial, sans-serif"
-              font-weight="900" font-size="12" fill="var(--vrc-blue)" letter-spacing="1">VCC</text>
-        <text x="38" y="21" font-family="Arial, Helvetica, sans-serif"
-              font-size="5.5" fill="#555">Vancouver Community College</text>
+        <!-- VCC brand mark: dark-green wedge -->
+        <polygon points="0,24 140,24 140,4 0,14" fill="#1B5632"/>
+        <!-- VCC wordmark in white -->
+        <text x="70" y="20"
+              font-family="'Arial Black', Arial, sans-serif"
+              font-weight="900" font-size="14" fill="#fff"
+              text-anchor="middle" letter-spacing="1">VCC</text>
       </svg>
     </div>
     <div class="footer-copies">
