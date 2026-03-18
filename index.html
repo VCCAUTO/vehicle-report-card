@@ -47,7 +47,7 @@
   }
 
   /* ===== VCC LOGO ===== */
-  .vcc-logo-img { display: block; max-width: 195px; height: auto; }
+  .vcc-logo-img { display: block; max-width: 195px; max-height: 60px; width: auto; height: auto; }
 
   /* ===== PRINT & RESET BUTTONS ===== */
   .no-print-bar {
@@ -480,12 +480,11 @@
     @page { size: letter portrait; margin: 5mm; }
 
     /* --- Scale the whole document to fit one page ---
-       2-column layout reduces natural compact height from ~1400px to ~1170px;
-       zoom:0.75 reduces that to ~878px, comfortably fitting in the
-       ~1018px usable height (11" at 96dpi minus 2×5mm margins).
-       zoom is supported in all modern browsers (Chrome, Edge, Safari,
-       Firefox 126+). */
-    html { zoom: 0.75; }
+       zoom:0.73 scales the content to fit comfortably within the
+       ~1018px usable height of a letter-portrait page (11" at 96dpi
+       minus 2×5mm margins). zoom is supported in all modern browsers
+       (Chrome, Edge, Safari, Firefox 126+). */
+    html { zoom: 0.73; }
 
     /* --- Global color-adjust so backgrounds print --- */
     * {
@@ -1058,7 +1057,7 @@
     <div class="footer-logo">
       <img src="vcc-dark-green-print.jpg"
            alt="VCC – Vancouver Community College"
-           style="height:46px;width:auto;display:block;">
+           style="height:29px;width:auto;display:block;">
     </div>
   </div>
 
